@@ -1,4 +1,11 @@
 # Q1
+"""
+Depth-first search is used to implement topological sorting. 
+Topological sort is a linear ordering of the vertices in a directed acyclic graph (DAG) such that for every directed edge u → v, 
+vertex u comes before v in the ordering. It helps achieve this because it explores a node's entire path (depth) before backtracking. 
+Then, once all descendants of a node are processed, we can safely record that node. Also by pushing nodes to a stack after visiting 
+all their neighbors, we ensure that each node is placed after all nodes it depends on.
+"""
 
 # from ex1.py
 class Graph:
@@ -62,9 +69,29 @@ class Graph:
                     current = current.next
                 return neighbors
         return []
-    
-    
 
+    # Q3
+    def topoSort(self):
+        if not self.isDAG():
+            raise Exception("Topological sort not possible: the graph has cycles.")
+
+        visited = set()
+        result = []
+
+        def dfs(v):
+            visited.add(v)
+            neighbors = self.get_neighbors(v)
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    dfs(neighbor)
+            result.append(v)
+
+        for node in self.nodes:
+            if node not in visited:
+                dfs(node)
+        
+        result.reverse()
+        return result
 
 
 class Node:
@@ -114,4 +141,3 @@ class LinkedList:
         print(f'Elements: {elements}, Weights: {weights}')
 
 
-# Q3
